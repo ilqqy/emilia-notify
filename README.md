@@ -25,6 +25,30 @@ Emilia slides in from the right edge and presents every notification on a live Q
 
 ---
 
+## Quick start
+
+With Quickshell installed, download the project:
+
+```bash
+git clone https://github.com/ilqqy/emilia-notifications.git
+cd emilia-notifications
+```
+
+Run the daemon from the checkout after stopping your existing notification daemon:
+
+```bash
+qs -p shell.qml --no-duplicate
+```
+
+Send a notification from another terminal:
+
+```bash
+notify-send "Emilia is ready" "Your notifications have a new presenter."
+```
+
+For a preview alongside your current daemon, use the [isolated preview](#install).
+For automatic startup, follow [the service setup](#use-it-as-your-notification-daemon).
+
 ## What makes it different
 
 Most notification daemons stack plain rectangles in a corner. Emilia Notifications treats the popup as one animated composition:

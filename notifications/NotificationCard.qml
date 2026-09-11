@@ -14,7 +14,8 @@ Item {
     readonly property var defaultAction: notification
         ? Array.from(notification.actions).find(action => action.identifier === "default") || null : null
     readonly property var buttonActions: notification
-        ? Array.from(notification.actions).filter(action => action.identifier !== "default") : []
+        ? Array.from(notification.actions).filter(action => action.identifier !== "default"
+            && (action.text || "").trim().toLowerCase() !== "mark as read") : []
     readonly property real horizontalInset: NotificationConfig.cardPadding + NotificationConfig.cardGripInset
     readonly property real topInset: NotificationConfig.cardPadding + NotificationConfig.cardTopGripInset
     onButtonActionsChanged: actionStrip.contentX = 0
@@ -99,8 +100,8 @@ Item {
                 }
                 Rectangle {
                     objectName: "closeButton"
-                    Layout.preferredWidth: 23
-                    Layout.preferredHeight: 23
+                    Layout.preferredWidth: NotificationConfig.closeSize
+                    Layout.preferredHeight: NotificationConfig.closeSize
                     radius: width / 2
                     color: closeArea.containsMouse ? NotificationTheme.accentSoft : "transparent"
                     Text {
@@ -181,7 +182,7 @@ Item {
                 Layout.preferredHeight: NotificationConfig.actionHeight
                 Layout.minimumHeight: NotificationConfig.actionHeight
                 visible: root.buttonActions.length > 0
-                contentWidth: actionRow.width
+                contentWidth: Math.max(width, actionRow.width)
                 contentHeight: height
                 flickableDirection: Flickable.HorizontalFlick
                 boundsBehavior: Flickable.StopAtBounds
@@ -196,6 +197,7 @@ Item {
                 }
                 Row {
                     id: actionRow
+                    x: Math.max(0, (actionStrip.width - width) / 2)
                     spacing: NotificationConfig.actionSpacing
                     Repeater {
                         model: root.buttonActions
@@ -204,23 +206,25 @@ Item {
                             required property var modelData
                             required property int index
                             objectName: "actionButton" + index
-                            width: Math.min(actionStrip.width, actionLabel.implicitWidth + 18)
+                            width: Math.min(actionStrip.width, actionLabel.implicitWidth
+                                + 2 * NotificationConfig.actionHorizontalPadding)
                             height: NotificationConfig.actionHeight
-                            radius: 7
+                            radius: NotificationConfig.actionRadius
                             color: actionArea.containsMouse ? NotificationTheme.accentSoft
                                 : Qt.rgba(NotificationTheme.foreground.r, NotificationTheme.foreground.g,
-                                    NotificationTheme.foreground.b, 0.08)
-                            border.width: 1
+                                    NotificationTheme.foreground.b, 0.04)
+                            border.width: actionArea.containsMouse ? 1 : 0
                             border.color: NotificationTheme.border
                             Text {
                                 id: actionLabel
                                 anchors.fill: parent
-                                anchors.margins: 5
+                                anchors.leftMargin: NotificationConfig.actionHorizontalPadding
+                                anchors.rightMargin: NotificationConfig.actionHorizontalPadding
                                 text: actionButton.modelData ? actionButton.modelData.text : ""
                                 textFormat: Text.PlainText
                                 color: NotificationTheme.foreground
                                 font.family: NotificationTheme.fontFamily
-                                font.pixelSize: 11
+                                font.pixelSize: NotificationConfig.actionFontSize
                                 elide: Text.ElideRight
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter

@@ -48,9 +48,13 @@ Singleton {
     property int cardGripInset: 8
     property int cardTopGripInset: 3
     property int cardRadius: 18
-    property int iconSize: 21
+    property int iconSize: 18
+    property int closeSize: 18
     property int imageSize: 32
-    property int actionHeight: 22
+    property int actionHeight: 16
+    property int actionFontSize: 10
+    property int actionHorizontalPadding: 6
+    property int actionRadius: 4
     property int actionSpacing: 5
     property int contentSpacing: 3
     property int titleMaxLines: 1
