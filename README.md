@@ -232,7 +232,7 @@ property real emiliaX: 284
 property real emiliaY: 0
 
 property real cardX: 118
-property real cardY: 118
+property real cardY: Math.ceil(gripTopY * maxPoseScale)
 property real cardWidth: 300
 property real cardHeight: 0
 property real cardMinHeight: 62
@@ -258,6 +258,11 @@ The included `assets/emilia_side_body.png` is a transparent side-pose image. For
 4. Tune the scale and position properties in that same file.
 
 When `handSource` is empty, the popup uses a registered crop from the included body art as the foreground grip.
+The character scales uniformly with the live card height, keeping the upper grip
+and lower palm on its edges. `gripRightX`, `gripTopY`, and `gripBottomY` define
+those contact points in source-image pixels; adjust them when changing artwork.
+Her right edge stays anchored to the monitor at every size. The card's horizontal
+position follows the grip automatically as the message height changes.
 
 ## Tested behavior
 

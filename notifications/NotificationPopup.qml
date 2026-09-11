@@ -198,12 +198,23 @@ PanelWindow {
         width: NotificationConfig.popupWidth
         height: NotificationConfig.popupHeight - NotificationConfig.popupTopMargin
 
+        // Scale all character pixels uniformly about the upper grip. The
+        // distance to the lower palm then always equals the live card height.
+        readonly property real poseScale: card.height
+            / (NotificationConfig.gripBottomY - NotificationConfig.gripTopY)
+        // Keep the artwork flush with the window's monitor-anchored right edge
+        // at every scale; derive the card position from the moving grip.
+        readonly property real poseX: width - NotificationConfig.bodySourceRect.width * poseScale
+        readonly property real poseY: card.y - NotificationConfig.gripTopY * poseScale
+            + NotificationConfig.emiliaY
+        readonly property real overlayScale: poseScale * NotificationConfig.handScale / NotificationConfig.emiliaScale
+
         // z: 0 — right-side character, behind the live sign.
         Image {
-            x: NotificationConfig.emiliaX
-            y: NotificationConfig.emiliaY
-            width: NotificationConfig.bodyWidth
-            height: NotificationConfig.bodyHeight
+            x: composition.poseX
+            y: composition.poseY
+            width: NotificationConfig.bodySourceRect.width * composition.poseScale
+            height: NotificationConfig.bodySourceRect.height * composition.poseScale
             z: 0
             source: NotificationConfig.emiliaSource
             sourceClipRect: NotificationConfig.bodySourceRect
@@ -218,7 +229,7 @@ PanelWindow {
             id: card
             objectName: "notificationCard"
 
-            x: NotificationConfig.cardX
+            x: composition.poseX + NotificationConfig.gripRightX * composition.poseScale - width
             y: NotificationConfig.cardY
             width: NotificationConfig.cardWidth
             height: implicitHeight
@@ -233,10 +244,12 @@ PanelWindow {
         // A registered foreground PNG can replace the crop without changing the card.
         Image {
             visible: !NotificationConfig.handSource.toString()
-            x: NotificationConfig.handX + NotificationConfig.upperHandSourceRect.x * NotificationConfig.handScale
-            y: NotificationConfig.handY + NotificationConfig.upperHandSourceRect.y * NotificationConfig.handScale
-            width: NotificationConfig.upperHandSourceRect.width * NotificationConfig.handScale
-            height: NotificationConfig.upperHandSourceRect.height * NotificationConfig.handScale
+            x: composition.poseX + NotificationConfig.handX - NotificationConfig.emiliaX
+                + NotificationConfig.upperHandSourceRect.x * composition.overlayScale
+            y: composition.poseY + NotificationConfig.handY - NotificationConfig.emiliaY
+                + NotificationConfig.upperHandSourceRect.y * composition.overlayScale
+            width: NotificationConfig.upperHandSourceRect.width * composition.overlayScale
+            height: NotificationConfig.upperHandSourceRect.height * composition.overlayScale
             z: 2
             source: NotificationConfig.emiliaSource
             sourceClipRect: NotificationConfig.upperHandSourceRect
@@ -244,10 +257,10 @@ PanelWindow {
         }
         Image {
             visible: !!NotificationConfig.handSource.toString()
-            x: NotificationConfig.handX
-            y: NotificationConfig.handY
-            width: NotificationConfig.bodySourceRect.width * NotificationConfig.handScale
-            height: NotificationConfig.bodySourceRect.height * NotificationConfig.handScale
+            x: composition.poseX + NotificationConfig.handX - NotificationConfig.emiliaX
+            y: composition.poseY + NotificationConfig.handY - NotificationConfig.emiliaY
+            width: NotificationConfig.bodySourceRect.width * composition.overlayScale
+            height: NotificationConfig.bodySourceRect.height * composition.overlayScale
             z: 2
             source: NotificationConfig.handSource
             mipmap: true

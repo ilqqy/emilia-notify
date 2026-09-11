@@ -13,6 +13,11 @@ Singleton {
     property url handSource: ""
     readonly property rect bodySourceRect: Qt.rect(0, 0, 1024, 1536)
     readonly property rect upperHandSourceRect: Qt.rect(402, 430, 112, 110)
+    // Contact points in the artwork. Fit the intact pose between card edges.
+    property real gripRightX: 536
+    property real gripTopY: 472
+    property real gripBottomY: 810
+    readonly property real maxPoseScale: cardMaxHeight / (gripBottomY - gripTopY)
 
     property real emiliaScale: 0.25
     property real emiliaX: 284
@@ -20,7 +25,7 @@ Singleton {
     // Match Mako's default notification geometry: 300 px wide and at most
     // 100 px tall. Keep the right edge at x=418 so Emilia's grip stays aligned.
     property real cardX: 118
-    property real cardY: 118
+    property real cardY: Math.ceil(gripTopY * maxPoseScale)
     property real cardWidth: 300
     property real cardHeight: 0
     property real cardMinHeight: 62
@@ -65,5 +70,6 @@ Singleton {
     readonly property real popupWidth: Math.ceil(Math.max(
         emiliaX + bodyWidth, cardX + cardWidth))
     readonly property real popupHeight: Math.ceil(Math.max(
-        emiliaY + bodyHeight, cardY + cardMaxHeight) + popupTopMargin + 8)
+        cardY + emiliaY + (bodySourceRect.height - gripTopY) * maxPoseScale,
+        cardY + cardMaxHeight) + popupTopMargin + 8)
 }
