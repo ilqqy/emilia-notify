@@ -230,7 +230,8 @@ PanelWindow {
             objectName: "notificationCard"
 
             x: composition.poseX + NotificationConfig.gripRightX * composition.poseScale - width
-            y: NotificationConfig.cardY
+            y: NotificationConfig.cardY - (NotificationConfig.maxPoseScale - composition.poseScale)
+                * NotificationConfig.gripTopY
             width: NotificationConfig.cardWidth
             height: implicitHeight
             z: 1

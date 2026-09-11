@@ -77,31 +77,83 @@ Item {
 
             RowLayout {
                 Layout.fillWidth: true
-                spacing: 7
-                Image {
-                    objectName: "appIcon"
-                    Layout.preferredWidth: NotificationConfig.iconSize
-                    Layout.preferredHeight: NotificationConfig.iconSize
-                    visible: status === Image.Ready
-                    source: root.resolveIcon(root.notification ? root.notification.appIcon : "")
-                    sourceSize: Qt.size(NotificationConfig.iconSize, NotificationConfig.iconSize)
-                    asynchronous: true
-                    mipmap: true
-                    fillMode: Image.PreserveAspectFit
+                Layout.fillHeight: true
+                Layout.minimumHeight: 0
+                spacing: NotificationConfig.contentSpacing * 3
+
+                Item {
+                    Layout.preferredWidth: NotificationConfig.imageSize
+                    Layout.preferredHeight: NotificationConfig.imageSize
+                    Layout.alignment: Qt.AlignVCenter
+                    visible: attachment.status === Image.Ready || appIcon.status === Image.Ready
+
+                    Image {
+                        id: appIcon
+                        objectName: "appIcon"
+                        anchors.fill: parent
+                        visible: attachment.status !== Image.Ready && status === Image.Ready
+                        source: root.resolveIcon(root.notification ? root.notification.appIcon : "")
+                        sourceSize: Qt.size(NotificationConfig.imageSize * 2, NotificationConfig.imageSize * 2)
+                        asynchronous: true
+                        mipmap: true
+                        fillMode: Image.PreserveAspectFit
+                    }
+                    Image {
+                        id: attachment
+                        objectName: "attachment"
+                        anchors.fill: parent
+                        visible: status === Image.Ready
+                        source: root.resolveImage(root.notification ? root.notification.image : "")
+                        sourceSize: Qt.size(NotificationConfig.imageSize * 2, NotificationConfig.imageSize * 2)
+                        asynchronous: true
+                        mipmap: true
+                        fillMode: Image.PreserveAspectFit
+                    }
                 }
-                Text {
+
+                ColumnLayout {
                     Layout.fillWidth: true
-                    text: root.notification && root.notification.appName ? root.notification.appName : "Notification"
-                    textFormat: Text.PlainText
-                    color: NotificationTheme.muted
-                    font.family: NotificationTheme.fontFamily
-                    font.pixelSize: 11
-                    elide: Text.ElideRight
+                    Layout.fillHeight: true
+                    Layout.minimumWidth: 0
+                    Layout.minimumHeight: 0
+                    spacing: NotificationConfig.contentSpacing
+                    Item { Layout.fillHeight: true; Layout.minimumHeight: 0 }
+                    Text {
+                        Layout.fillWidth: true
+                        text: root.notification ? (root.notification.summary || root.notification.appName) : ""
+                        textFormat: Text.PlainText
+                        color: NotificationTheme.foreground
+                        font.family: NotificationTheme.fontFamily
+                        font.pixelSize: 15
+                        font.weight: Font.Bold
+                        wrapMode: Text.Wrap
+                        maximumLineCount: NotificationConfig.titleMaxLines
+                        elide: Text.ElideRight
+                    }
+                    Text {
+                        id: bodyText
+                        objectName: "bodyText"
+                        Layout.fillWidth: true
+                        Layout.minimumHeight: 0
+                        visible: text !== ""
+                        text: root.notification ? root.notification.body : ""
+                        textFormat: Text.PlainText
+                        color: NotificationTheme.foreground
+                        opacity: root.isLow ? 0.78 : 0.9
+                        font.family: NotificationTheme.fontFamily
+                        font.pixelSize: 13
+                        wrapMode: Text.Wrap
+                        maximumLineCount: NotificationConfig.bodyMaxLines
+                        elide: Text.ElideRight
+                        clip: true
+                    }
+                    Item { Layout.fillHeight: true; Layout.minimumHeight: 0 }
                 }
                 Rectangle {
                     objectName: "closeButton"
                     Layout.preferredWidth: NotificationConfig.closeSize
                     Layout.preferredHeight: NotificationConfig.closeSize
+                    Layout.alignment: Qt.AlignTop
                     radius: width / 2
                     color: closeArea.containsMouse ? NotificationTheme.accentSoft : "transparent"
                     Text {
@@ -119,60 +171,6 @@ Item {
                     }
                 }
             }
-
-            Text {
-                Layout.fillWidth: true
-                visible: text !== ""
-                text: root.notification ? root.notification.summary : ""
-                textFormat: Text.PlainText
-                color: NotificationTheme.foreground
-                font.family: NotificationTheme.fontFamily
-                font.pixelSize: 15
-                font.weight: Font.Bold
-                wrapMode: Text.Wrap
-                maximumLineCount: NotificationConfig.titleMaxLines
-                elide: Text.ElideRight
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.minimumHeight: 0
-                visible: attachment.status === Image.Ready || bodyText.text !== ""
-                spacing: 7
-                Image {
-                    id: attachment
-                    objectName: "attachment"
-                    Layout.preferredWidth: NotificationConfig.imageSize
-                    Layout.preferredHeight: NotificationConfig.imageSize
-                    Layout.maximumHeight: parent.height
-                    visible: status === Image.Ready
-                    source: root.resolveImage(root.notification ? root.notification.image : "")
-                    sourceSize: Qt.size(NotificationConfig.imageSize * 2, NotificationConfig.imageSize * 2)
-                    asynchronous: true
-                    fillMode: Image.PreserveAspectFit
-                }
-                Text {
-                    id: bodyText
-                    objectName: "bodyText"
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.minimumHeight: 0
-                    visible: text !== ""
-                    text: root.notification ? root.notification.body : ""
-                    textFormat: Text.PlainText
-                    color: NotificationTheme.foreground
-                    opacity: root.isLow ? 0.78 : 0.9
-                    font.family: NotificationTheme.fontFamily
-                    font.pixelSize: 13
-                    wrapMode: Text.Wrap
-                    maximumLineCount: NotificationConfig.bodyMaxLines
-                    elide: Text.ElideRight
-                    clip: true
-                    verticalAlignment: Text.AlignTop
-                }
-            }
-
             // Every non-default action remains reachable in a fixed-height row.
             // Drag or scroll sideways when the buttons exceed the card width.
             Flickable {

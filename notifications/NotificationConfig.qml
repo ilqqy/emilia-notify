@@ -7,16 +7,16 @@ Singleton {
     id: root
 
     // Transparent side-pose art; the card is always live QML.
-    readonly property url emiliaSource: Qt.resolvedUrl("../assets/emilia_side_body.png")
+    readonly property url emiliaSource: Qt.resolvedUrl("../assets/emilia_side_complete.png")
     // Optional registered transparent foreground layer. Empty uses hand crops
     // from the body, so final layered artwork can be swapped without UI edits.
     property url handSource: ""
     readonly property rect bodySourceRect: Qt.rect(0, 0, 1024, 1536)
-    readonly property rect upperHandSourceRect: Qt.rect(402, 430, 112, 110)
+    readonly property rect upperHandSourceRect: Qt.rect(418, 508, 75, 58)
     // Contact points in the artwork. Fit the intact pose between card edges.
-    property real gripRightX: 536
-    property real gripTopY: 472
-    property real gripBottomY: 810
+    property real gripRightX: 655
+    property real gripTopY: 535
+    property real gripBottomY: 750
     readonly property real maxPoseScale: cardMaxHeight / (gripBottomY - gripTopY)
 
     property real emiliaScale: 0.25
@@ -55,7 +55,7 @@ Singleton {
     property int cardRadius: 18
     property int iconSize: 18
     property int closeSize: 18
-    property int imageSize: 32
+    property int imageSize: 40
     property int actionHeight: 16
     property int actionFontSize: 10
     property int actionHorizontalPadding: 6

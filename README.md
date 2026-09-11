@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/emilia_side_body.png" width="230" alt="Chibi Emilia presenting a notification" />
+<img src="assets/emilia_side_complete.png" width="230" alt="Chibi Emilia presenting a notification" />
 
 # Emilia Notifications
 
@@ -250,7 +250,11 @@ Colors come from `~/.cache/wal/colors.json` when available. Edit [`notifications
 
 ### Swap the character art
 
-The included `assets/emilia_side_body.png` is a transparent side-pose image. For a clean custom two-layer character:
+The included `assets/emilia_side_complete.png` is a transparent, complete character
+sprite with both feet visible. It was generated with the built-in imagegen tool:
+full-body chibi Emilia leaning from the right, upper hand gripping an imaginary
+card, lower palm presenting it, complete feet and transparent padding, no sign or
+text. The older cropped artwork is preserved. For a custom two-layer character:
 
 1. Export `emilia_side_body.png` and `emilia_side_hand_overlay.png` on identical transparent canvases.
 2. Put the card area between the body and hand layers.
@@ -263,6 +267,9 @@ and lower palm on its edges. `gripRightX`, `gripTopY`, and `gripBottomY` define
 those contact points in source-image pixels; adjust them when changing artwork.
 Her right edge stays anchored to the monitor at every size. The card's horizontal
 position follows the grip automatically as the message height changes.
+Card content uses an image or app icon on the left and a title above the body on
+the right. Images take priority over app icons; the column collapses when neither
+is available. The app name is used as a fallback when the title is empty.
 
 ## Tested behavior
 
