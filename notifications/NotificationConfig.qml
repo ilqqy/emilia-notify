@@ -17,12 +17,14 @@ Singleton {
     property real emiliaScale: 0.25
     property real emiliaX: 284
     property real emiliaY: 0
-    property real cardX: 8
+    // Match Mako's default notification geometry: 300 px wide and at most
+    // 100 px tall. Keep the right edge at x=418 so Emilia's grip stays aligned.
+    property real cardX: 118
     property real cardY: 118
-    property real cardWidth: 410
-    property real cardHeight: 150
-    property real cardMinHeight: 150
-    property real cardMaxHeight: 218
+    property real cardWidth: 300
+    property real cardHeight: 0
+    property real cardMinHeight: 62
+    property real cardMaxHeight: 100
     property real handX: emiliaX
     property real handY: emiliaY
     property real handScale: emiliaScale
@@ -42,17 +44,17 @@ Singleton {
     property int maximumRequestedTimeout: 30000
 
     // Card metrics.
-    property int cardPadding: 16
-    property int cardGripInset: 10
+    property int cardPadding: 8
+    property int cardGripInset: 8
     property int cardTopGripInset: 3
     property int cardRadius: 18
-    property int iconSize: 27
-    property int imageSize: 42
-    property int actionHeight: 26
+    property int iconSize: 21
+    property int imageSize: 32
+    property int actionHeight: 22
     property int actionSpacing: 5
-    property int contentSpacing: 5
-    property int titleMaxLines: 2
-    property int bodyMaxLines: 3
+    property int contentSpacing: 3
+    property int titleMaxLines: 1
+    property int bodyMaxLines: 2
 
     readonly property real bodyWidth: bodySourceRect.width * emiliaScale
     readonly property real bodyHeight: bodySourceRect.height * emiliaScale

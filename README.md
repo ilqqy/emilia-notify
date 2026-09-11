@@ -207,12 +207,12 @@ property real emiliaScale: 0.25
 property real emiliaX: 284
 property real emiliaY: 0
 
-property real cardX: 8
+property real cardX: 118
 property real cardY: 118
-property real cardWidth: 410
-property real cardHeight: 150
-property real cardMinHeight: 150
-property real cardMaxHeight: 218
+property real cardWidth: 300
+property real cardHeight: 0
+property real cardMinHeight: 62
+property real cardMaxHeight: 100
 
 property real handX: emiliaX
 property real handY: emiliaY

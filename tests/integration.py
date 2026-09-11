@@ -192,7 +192,8 @@ with contextlib.ExitStack() as cleanup:
                 icon="missing-emilia-test-icon", image=(ROOT / "assets/emilia.png").as_uri())
             s = until(lambda s: s["phase"] == "visible" and s["imageVisible"])
             assert not s["iconVisible"]
-            assert s["cardHeight"] <= 218 and s["bodyHeight"] > 0
+            assert s["cardWidth"] == 300
+            assert s["cardHeight"] <= 100 and s["bodyHeight"] > 0
             assert s["closeBottom"] <= s["cardHeight"]
             assert s["actionsBottom"] <= s["cardHeight"]
             assert s["maskWidth"] == s["cardWidth"]
